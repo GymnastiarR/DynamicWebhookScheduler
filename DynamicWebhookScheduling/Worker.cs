@@ -1,12 +1,15 @@
 ﻿using DynamicWebhookScheduling;
+using System.Net;
 
 public class JobWorker : BackgroundService
 {
     private readonly JobService _jobService;
+    private readonly HttpClient _httpClient;
 
-    public JobWorker(JobService jobService)
+    public JobWorker(JobService jobService, IHttpClientFactory clientFactory)
     {
         _jobService = jobService;
+        this._httpClient = clientFactory.CreateClient();
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,11 +40,11 @@ public class JobWorker : BackgroundService
                 }
             }
 
-            var jobToExecute = _jobService.GetNextJob();
+            var jobToExecute = _jobService.GetNextJob(stoppingToken);
 
             if (jobToExecute != null)
             {
-                Console.WriteLine($"Mengeksekusi Webhook: {jobToExecute.WebhookUrl}");
+                this._jobService.RunJob(jobToExecute);
             }
         }
     }

@@ -44,7 +44,7 @@ public class JobWorker : BackgroundService
 
             if (jobToExecute != null)
             {
-                this._jobService.RunJob(jobToExecute);
+                await this._jobService.RunJob(jobToExecute);
             }
         }
     }

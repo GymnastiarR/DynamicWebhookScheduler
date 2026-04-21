@@ -2,10 +2,9 @@
 {
     public class Job
     {
-        public int? Id { get; set; }
+        public required string Id { get; set; }
         public required DateTime RunAt { get; set; }
         public required Request Request { get; set; }
-        public CancellationTokenSource CancellationTokenSource { get; } = new();
     }
 
     public class Request
